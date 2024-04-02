@@ -17,6 +17,7 @@ public class Mario {
     public boolean isEast;
     public boolean isControlled;
 
+
     public Mario(int pXpos, int pYpos){
         xpos = pXpos;
         ypos = pYpos;

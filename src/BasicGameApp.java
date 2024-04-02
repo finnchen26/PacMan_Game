@@ -24,6 +24,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
 
     private Mario mario;
     private Mario mariotoad;
+    private Mario mariospawn;
 
     public static void main(String[] args) {
         BasicGameApp ex = new BasicGameApp();
@@ -33,11 +34,16 @@ public class BasicGameApp implements Runnable ,KeyListener {
     public BasicGameApp() {
         setUpGraphics();
         background = Toolkit.getDefaultToolkit().getImage("background.jpg");
-        toadcool = Toolkit.getDefaultToolkit().getImage("toadcool .png");
+        toadcool = Toolkit.getDefaultToolkit().getImage("toadcool.png");
         marioPic = Toolkit.getDefaultToolkit().getImage("mario.png");
+        toadPic = Toolkit.getDefaultToolkit().getImage("toad.png");
        // toadPic
         mario = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
         mariotoad = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
+        mariospawn = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
+
+        mario.isControlled = true;
+        mariospawn.isAlive = false;
     }
 
     public void run() {
@@ -49,15 +55,16 @@ public class BasicGameApp implements Runnable ,KeyListener {
     }
 
     public void moveThings(){
-        mario.wrap();
+        mario.bounce();
         mariotoad.bounce();
 
         if(mario.rect.intersects(mariotoad.rect) && !mario.isCrashing && !mariotoad.isCrashing){
             System.out.println("Crash!");
-            mario.height = mario.height - 30;
-            mariotoad.height = mariotoad.height + 30;
+//            mario.height = mario.height - 30;
+//            mariotoad.height = mariotoad.height + 30;
             mario.isCrashing = true;
             mariotoad.isCrashing = true;
+            mariospawn.isAlive = true;
         }
 
         if (mario.rect.intersects(mariotoad.rect) == false){
@@ -106,12 +113,19 @@ public class BasicGameApp implements Runnable ,KeyListener {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
-x = x -2;
+        x = x -2;
         g.drawImage(background, x, 0, WIDTH, HEIGHT, null);
         g.drawImage(marioPic, mario.xpos, mario.ypos, mario.width, mario.height, null);
         g.drawImage(toadPic, mariotoad.xpos, mariotoad.ypos, mariotoad.width, mariotoad.height, null);
+
+        if (mariospawn.isAlive){
+            g.drawImage(toadcool, mariospawn.xpos, mariospawn.ypos, mariospawn.width, mariospawn.height, null);
+        }
+
         g.dispose();
         bufferStrategy.show();
+
+
     }
 
     @Override
@@ -121,11 +135,48 @@ x = x -2;
 
     @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+        if (e.getKeyCode() == 38){
+            System.out.println("going up");
+            mario.isNorth = true;
+        }
+        else if (e.getKeyCode() == 40){
+            System.out.println("going down");
+            mario.isSouth = true;
 
+
+        }
+        else if (e.getKeyCode() == 37){
+            System.out.println("going left");
+            mario.isWest = true;
+
+        }
+        else if (e.getKeyCode() == 39){
+            System.out.println("going right");
+            mario.isEast = true;
+
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == 38){
+            System.out.println("going up");
+            mario.isNorth = false;
+        }
 
+        if (e.getKeyCode() == 40){
+            System.out.println("going down");
+            mario.isSouth = false;
+        }
+
+        if (e.getKeyCode() == 37){
+            System.out.println("going left");
+            mario.isWest = false;
+        }
+        if (e.getKeyCode() == 39){
+            System.out.println("going right");
+            mario.isEast = false;
+        }
     }
 }
