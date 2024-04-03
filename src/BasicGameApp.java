@@ -20,6 +20,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
     public Image marioPic;
     public Image toadPic;
     int x = 0;
+    int x2 = 999;
 
 
     private Mario mario;
@@ -34,7 +35,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
     public BasicGameApp() {
         setUpGraphics();
         background = Toolkit.getDefaultToolkit().getImage("background.jpg");
-        toadcool = Toolkit.getDefaultToolkit().getImage("toadcool.png");
+        toadcool = Toolkit.getDefaultToolkit().getImage("toadcool .png");
         marioPic = Toolkit.getDefaultToolkit().getImage("mario.png");
         toadPic = Toolkit.getDefaultToolkit().getImage("toad.png");
        // toadPic
@@ -43,6 +44,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
         mariospawn = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
 
         mario.isControlled = true;
+        mariotoad.isControlled = true;
         mariospawn.isAlive = false;
     }
 
@@ -113,8 +115,18 @@ public class BasicGameApp implements Runnable ,KeyListener {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
-        x = x -2;
+        if (x < -1000) {
+            x = 1000;
+        }
+        if (x2 < -1000) {
+            x2 = 1000;
+        }
+        x = x - 2;
+        x2 = x2 - 2;
         g.drawImage(background, x, 0, WIDTH, HEIGHT, null);
+        g.drawImage(background, x2, 0, WIDTH, HEIGHT, null);
+        g.drawRect(mario.rect.x,mario.rect.y,mario.rect.width,mario.rect.height);
+        g.drawRect(mariotoad.rect.x,mariotoad.rect.y,mariotoad.rect.width,mariotoad.rect.height);
         g.drawImage(marioPic, mario.xpos, mario.ypos, mario.width, mario.height, null);
         g.drawImage(toadPic, mariotoad.xpos, mariotoad.ypos, mariotoad.width, mariotoad.height, null);
 
@@ -156,6 +168,31 @@ public class BasicGameApp implements Runnable ,KeyListener {
             mario.isEast = true;
 
         }
+
+
+
+        //mario taod
+        System.out.println(e.getKeyCode());
+        if (e.getKeyCode() == 87){
+            System.out.println("going up toad");
+            mariotoad.isNorth = true;
+        }
+        else if (e.getKeyCode() == 83){
+            System.out.println("going down toad");
+            mariotoad.isSouth = true;
+
+
+        }
+        else if (e.getKeyCode() == 65){
+            System.out.println("going left toad");
+            mariotoad.isWest = true;
+
+        }
+        else if (e.getKeyCode() == 68){
+            System.out.println("going right toad");
+            mariotoad.isEast = true;
+
+        }
     }
 
     @Override
@@ -178,5 +215,31 @@ public class BasicGameApp implements Runnable ,KeyListener {
             System.out.println("going right");
             mario.isEast = false;
         }
+
+        //toad
+
+        System.out.println(e.getKeyCode());
+        if (e.getKeyCode() == 87){
+            System.out.println("going up toead");
+            mariotoad.isNorth = false;
+        }
+        else if (e.getKeyCode() == 83){
+            System.out.println("going down toad");
+            mariotoad.isSouth = false;
+
+
+        }
+        else if (e.getKeyCode() == 65){
+            System.out.println("going left taod");
+            mariotoad.isWest = false;
+
+        }
+        else if (e.getKeyCode() == 68){
+            System.out.println("going right toad");
+            mariotoad.isEast = false;
+
+        }
+
     }
+
 }
