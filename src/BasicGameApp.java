@@ -40,7 +40,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
         toadcool = Toolkit.getDefaultToolkit().getImage("toadcool .png");
         marioPic = Toolkit.getDefaultToolkit().getImage("mario.png");
         toadPic = Toolkit.getDefaultToolkit().getImage("toad.png");
-        peachPic = Toolkit.getDefaultToolkit().getImage("peach.jpeg");
+        peachPic = Toolkit.getDefaultToolkit().getImage("peach.png");
        // toadPic
         mario = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
         mariotoad = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
@@ -83,6 +83,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
             mario.isCrashing = true;
             princessPeach.isCrashing = true;
             princessPeach.isAlive = true;
+
         }
 
         if (mario.rect.intersects(princessPeach.rect) == false){
@@ -152,7 +153,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
         }
 
         if (princessPeach.isAlive){
-            g.drawRect(peachPic, princessPeach.xpos, princessPeach.ypos, princessPeach.height, princessPeach.width, null);
+            g.drawImage(peachPic, princessPeach.xpos, princessPeach.ypos, princessPeach.height, princessPeach.width, null);
             princessPeach.wrap();
         }
 
