@@ -19,6 +19,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
     public Image toadcool;
     public Image marioPic;
     public Image toadPic;
+    public Image peachPic;
     int x = 0;
     int x2 = 999;
 
@@ -26,6 +27,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
     private Mario mario;
     private Mario mariotoad;
     private Mario mariospawn;
+    private Mario princessPeach;
 
     public static void main(String[] args) {
         BasicGameApp ex = new BasicGameApp();
@@ -38,14 +40,16 @@ public class BasicGameApp implements Runnable ,KeyListener {
         toadcool = Toolkit.getDefaultToolkit().getImage("toadcool .png");
         marioPic = Toolkit.getDefaultToolkit().getImage("mario.png");
         toadPic = Toolkit.getDefaultToolkit().getImage("toad.png");
+        peachPic = Toolkit.getDefaultToolkit().getImage("peach.jpeg");
        // toadPic
         mario = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
         mariotoad = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
         mariospawn = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
-
+        princessPeach = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
         mario.isControlled = true;
         mariotoad.isControlled = true;
         mariospawn.isAlive = false;
+        princessPeach.isAlive = false;
     }
 
     public void run() {
@@ -57,8 +61,8 @@ public class BasicGameApp implements Runnable ,KeyListener {
     }
 
     public void moveThings(){
-        mario.bounce();
-        mariotoad.bounce();
+        mario.wrap();
+        mariotoad.wrap();
 
         if(mario.rect.intersects(mariotoad.rect) && !mario.isCrashing && !mariotoad.isCrashing){
             System.out.println("Crash!");
@@ -72,6 +76,18 @@ public class BasicGameApp implements Runnable ,KeyListener {
         if (mario.rect.intersects(mariotoad.rect) == false){
             mario.isCrashing = false;
             mariotoad.isCrashing = false;
+        }
+
+        if (mario.rect.intersects(princessPeach.rect) && !mario.isCrashing && !princessPeach.isCrashing){
+            System.out.println("Princess Crash!");
+            mario.isCrashing = true;
+            princessPeach.isCrashing = true;
+            princessPeach.isAlive = true;
+        }
+
+        if (mario.rect.intersects(princessPeach.rect) == false){
+            mario.isCrashing = false;
+            princessPeach.isCrashing = false;
         }
     }
 
@@ -116,22 +132,28 @@ public class BasicGameApp implements Runnable ,KeyListener {
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
         if (x < -1000) {
-            x = 1000;
+            x = 980;
         }
         if (x2 < -1000) {
-            x2 = 1000;
+            x2 = 980;
         }
         x = x - 2;
         x2 = x2 - 2;
         g.drawImage(background, x, 0, WIDTH, HEIGHT, null);
         g.drawImage(background, x2, 0, WIDTH, HEIGHT, null);
-        g.drawRect(mario.rect.x,mario.rect.y,mario.rect.width,mario.rect.height);
-        g.drawRect(mariotoad.rect.x,mariotoad.rect.y,mariotoad.rect.width,mariotoad.rect.height);
+//        g.drawRect(mario.rect.x,mario.rect.y,mario.rect.width,mario.rect.height);
+//        g.drawRect(mariotoad.rect.x,mariotoad.rect.y,mariotoad.rect.width,mariotoad.rect.height);
         g.drawImage(marioPic, mario.xpos, mario.ypos, mario.width, mario.height, null);
         g.drawImage(toadPic, mariotoad.xpos, mariotoad.ypos, mariotoad.width, mariotoad.height, null);
 
         if (mariospawn.isAlive){
             g.drawImage(toadcool, mariospawn.xpos, mariospawn.ypos, mariospawn.width, mariospawn.height, null);
+            mariospawn.bounce();
+        }
+
+        if (princessPeach.isAlive){
+            g.drawRect(peachPic, princessPeach.xpos, princessPeach.ypos, princessPeach.height, princessPeach.width, null);
+            princessPeach.wrap();
         }
 
         g.dispose();
