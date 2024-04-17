@@ -76,19 +76,20 @@ public class BasicGameApp implements Runnable ,KeyListener {
         if (mario.rect.intersects(mariotoad.rect) == false){
             mario.isCrashing = false;
             mariotoad.isCrashing = false;
+
         }
 
-        if (mario.rect.intersects(princessPeach.rect) && !mario.isCrashing && !princessPeach.isCrashing){
+        if (mario.rect.intersects(mariospawn.rect) && !mario.isCrashing && !mariospawn.isCrashing){
             System.out.println("Princess Crash!");
             mario.isCrashing = true;
-            princessPeach.isCrashing = true;
+            mariospawn.isCrashing = true;
             princessPeach.isAlive = true;
 
         }
 
-        if (mario.rect.intersects(princessPeach.rect) == false){
+        if (mario.rect.intersects(mariospawn.rect) == false){
             mario.isCrashing = false;
-            princessPeach.isCrashing = false;
+            mariospawn.isCrashing = false;
         }
     }
 
