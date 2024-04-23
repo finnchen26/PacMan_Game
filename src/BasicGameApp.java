@@ -29,6 +29,8 @@ public class BasicGameApp implements Runnable ,KeyListener {
     private Mario mariospawn;
     private Mario princessPeach;
 
+    public Box[] mysterybox = new Box[10];
+
     public static void main(String[] args) {
         BasicGameApp ex = new BasicGameApp();
         new Thread(ex).start();
@@ -50,6 +52,11 @@ public class BasicGameApp implements Runnable ,KeyListener {
         mariotoad.isControlled = true;
         mariospawn.isAlive = false;
         princessPeach.isAlive = false;
+
+        for (int i = 0; i < mysterybox.length; i++){
+            mysterybox[i] = new MysteryArray((int)(Math.random()*940), (int)(Math.random()*620));
+        }
+
     }
 
     public void run() {
@@ -61,6 +68,13 @@ public class BasicGameApp implements Runnable ,KeyListener {
     }
 
     public void moveThings(){
+
+        for (int y = 0; y < mysterybox.length; y++){
+            mysterybox[y].bounce();
+        }
+
+
+
         mario.wrap();
         mariotoad.wrap();
 
