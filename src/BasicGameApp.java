@@ -6,6 +6,9 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.tools.Tool;
+import java.awt.Font;
+import java.awt.Graphics;
+
 
 public class BasicGameApp implements Runnable ,KeyListener {
     final int WIDTH = 1000;
@@ -20,8 +23,12 @@ public class BasicGameApp implements Runnable ,KeyListener {
     public Image marioPic;
     public Image toadPic;
     public Image peachPic;
+    public Image boxPic;
+
     int x = 0;
     int x2 = 999;
+    int crashPoints = 0;
+    String crashed = "";
 
 
     private Mario mario;
@@ -29,7 +36,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
     private Mario mariospawn;
     private Mario princessPeach;
 
-    public Box[] mysterybox = new Box[10];
+    public Box[] mysterybox = new Box[3];
 
     public static void main(String[] args) {
         BasicGameApp ex = new BasicGameApp();
@@ -43,6 +50,8 @@ public class BasicGameApp implements Runnable ,KeyListener {
         marioPic = Toolkit.getDefaultToolkit().getImage("mario.png");
         toadPic = Toolkit.getDefaultToolkit().getImage("toad.png");
         peachPic = Toolkit.getDefaultToolkit().getImage("peach.png");
+        boxPic = Toolkit.getDefaultToolkit().getImage("box.png");
+
        // toadPic
         mario = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
         mariotoad = new Mario((int)(Math.random()*940), (int)(Math.random()*620));
@@ -54,7 +63,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
         princessPeach.isAlive = false;
 
         for (int i = 0; i < mysterybox.length; i++){
-            mysterybox[i] = new MysteryArray((int)(Math.random()*940), (int)(Math.random()*620));
+            mysterybox[i] = new Box((int)(Math.random()*940), (int)(Math.random()*620));
         }
 
     }
@@ -71,7 +80,18 @@ public class BasicGameApp implements Runnable ,KeyListener {
 
         for (int y = 0; y < mysterybox.length; y++){
             mysterybox[y].bounce();
+            if (mario.rect.intersects(mysterybox[y].rect) && mario.isCrashing == false){
+                crashPoints = crashPoints + 1;
+                System.out.println("Congrats! You've earned one point!");
+                crashed = "Mario!";
+            }
+            if (princessPeach.rect.intersects(mysterybox[y].rect) && princessPeach.isCrashing == false){
+                crashPoints = crashPoints + 3;
+                System.out.println("Bonus congrats! With Princess Peach's powers, you are able to earn an extra three points!");
+                crashed = "Princess Peach!";
+            }
         }
+
 
 
 
@@ -141,6 +161,8 @@ public class BasicGameApp implements Runnable ,KeyListener {
         canvas.requestFocus();
         System.out.println("DONE graphic setup");
 
+
+
     }
 
     public void render(){
@@ -162,6 +184,7 @@ public class BasicGameApp implements Runnable ,KeyListener {
         g.drawImage(marioPic, mario.xpos, mario.ypos, mario.width, mario.height, null);
         g.drawImage(toadPic, mariotoad.xpos, mariotoad.ypos, mariotoad.width, mariotoad.height, null);
 
+
         if (mariospawn.isAlive){
             g.drawImage(toadcool, mariospawn.xpos, mariospawn.ypos, mariospawn.width, mariospawn.height, null);
             mariospawn.bounce();
@@ -172,11 +195,24 @@ public class BasicGameApp implements Runnable ,KeyListener {
             princessPeach.wrap();
         }
 
+        for (int y = 0; y < mysterybox.length; y++){
+            g.drawImage(boxPic, mysterybox[y].xpos, mysterybox[y].ypos, mysterybox[y].height, mysterybox[y].width, null);
+        }
+
+        g.drawString("Score: " +crashPoints, 100, 100);
+
+        g.drawString("Congrats," +crashed + "! You earned points!", 100, 80);
+
         g.dispose();
         bufferStrategy.show();
 
 
+
+
     }
+
+
+
 
     @Override
     public void keyTyped(KeyEvent e) {
